@@ -7,17 +7,17 @@ namespace BackEnd.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ResourceController : ControllerBase
+    public class TextResourceController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public ResourceController(DataContext context)
+        public TextResourceController(DataContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<TextResource>>> GetAllResources()
+        public async Task<ActionResult<List<TextResource>>> GetAllTextResources()
         {
             var TextResources = await _context.TextResources.ToListAsync();
 
@@ -25,21 +25,34 @@ namespace BackEnd.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public async Task<ActionResult<List<TextResource>>> GetResource(int id)
+        [Route("ResourcesByPageNameAndLngId")]
+        public async Task<ActionResult<List<TextResource>>> GetTextResourcesByPageNameAndLngId(string page, int languageId)
         {
-            var TextResource= await _context.Languages.FindAsync(id);
-            if (TextResource == null)
+            try
             {
-                return BadRequest("Text Resource Not Found");
-            }
+                // Retrieve text resources based on the provided page and language ID
+                var resources = await _context.TextResources
+                    .Where(tr => tr.PageName == page && tr.LanguageId == languageId)
+                    .ToListAsync();
 
-            return Ok(TextResource);
+                return Ok(resources);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while retrieving text resources. See logs for details.");
+            }
         }
 
+
         [HttpPost]
-        public async Task<ActionResult<List<TextResource>>> AddResource(TextResource TextResource)
+        public async Task<ActionResult<List<TextResource>>> AddTextResources(TextResource TextResource)
         {
+            if (!await _context.Languages.AnyAsync(l => l.Id == TextResource.LanguageId))
+            {
+                throw new ArgumentException("Invalid language ID provided");
+            }
+
             _context.TextResources.Add(TextResource);
             await _context.SaveChangesAsync();
 
@@ -47,16 +60,16 @@ namespace BackEnd.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult<List<Language>>> DeleteResource(int id)
+        public async Task<ActionResult<List<TextResource>>> DeleteTextResources(int id)
         {
-            var TextResourceToDelete = await _context.Languages.FindAsync(id);
+            var TextResourceToDelete = await _context.TextResources.FindAsync(id);
 
             if (TextResourceToDelete == null)
             {
                 return NotFound("Text Resource not found.");
             }
 
-            _context.Languages.Remove(TextResourceToDelete);
+            _context.TextResources.Remove(TextResourceToDelete);
 
             try
             {
