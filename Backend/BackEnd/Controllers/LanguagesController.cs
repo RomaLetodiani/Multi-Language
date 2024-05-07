@@ -24,19 +24,6 @@ namespace BackEnd.Controllers
             return Ok(languages);
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<ActionResult<List<Language>>> GetLanguage(int id)
-        {
-            var language = await _context.Languages.FindAsync(id);
-            if (language == null)
-            {
-                return BadRequest("Language Not Found");
-            }
-
-            return Ok(language);
-        }
-
         [HttpPost]
         public async Task<ActionResult<List<Language>>> AddLanguage(Language language)
         {
@@ -49,26 +36,21 @@ namespace BackEnd.Controllers
         [HttpDelete]
         public async Task<ActionResult<List<Language>>> DeleteLanguage(int id)
         {
-            // 1. Find the language by ID
             var languageToDelete = await _context.Languages.FindAsync(id);
 
-            // 2. Handle non-existent language
             if (languageToDelete == null)
             {
                 return NotFound("Language not found.");
             }
 
-            // 3. Perform deletion (optional: handle related entities)
             _context.Languages.Remove(languageToDelete);
 
-            // 4. Save changes and handle potential exceptions
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
             {
-                // Log the exception and handle appropriately (e.g., return a more informative error message)
                 Console.Write(ex.Message);
                 return BadRequest("An error occurred while deleting the language. See logs for details.");
             }
