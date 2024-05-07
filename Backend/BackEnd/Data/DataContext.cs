@@ -11,5 +11,6 @@ namespace BackEnd.Data
         }
         public DbSet<Language> Languages { get; set; }
         public DbSet<TextResource> TextResources { get; set; }
+        public DbSet<Page> Pages { get; set; }
     }
 }

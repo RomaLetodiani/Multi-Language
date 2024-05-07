@@ -5,11 +5,9 @@ namespace BackEnd.Entities
     public class TextResource
     {
         public int Id { get; set; }
-        public string Text { get; set; }
-
-        public int LanguageId { get; set; }
-
-        [ForeignKey("LanguageId")]  // Define foreign key relationship
-        public Language Language { get; set; }  // Navigation property
+        public required string Text { get; set; }
+        public required int LanguageId { get; set; } = 1;
+        public required string PageName { get; set; }
+        public required string Key { get; set;}
     }
 }
