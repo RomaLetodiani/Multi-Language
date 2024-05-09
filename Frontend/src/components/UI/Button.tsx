@@ -11,7 +11,7 @@ const Button = ({ children, className, ...rest }: Props) => {
     <button
       {...rest}
       className={twMerge(
-        'cursor-pointer rounded-lg px-5 py-2 bg-slate-500 shadow-lg text-white hover:opacity-90',
+        'cursor-pointer rounded-lg px-4 py-2 bg-slate-500 shadow-lg text-white hover:opacity-90',
         className,
       )}
     >
