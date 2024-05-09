@@ -75,10 +75,11 @@ namespace BackEnd.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
+                    b.Property<string>("LanguageCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PageName")
+                    b.Property<string>("PageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

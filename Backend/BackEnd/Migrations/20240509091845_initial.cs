@@ -44,10 +44,10 @@ namespace BackEnd.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LanguageId = table.Column<int>(type: "int", nullable: false),
-                    PageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LanguageCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

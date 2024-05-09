@@ -25,14 +25,14 @@ namespace BackEnd.Controllers
         }
 
         [HttpGet]
-        [Route("ResourcesByPageNameAndLngId")]
-        public async Task<ActionResult<List<TextResource>>> GetTextResourcesByPageNameAndLngId(string page, int languageId)
+        [Route("ResourcesByPageUrlAndLngCode")]
+        public async Task<ActionResult<List<TextResource>>> GetTextResourcesByPageUrlAndLngCode(string page, string languageCode)
         {
             try
             {
                 // Retrieve text resources based on the provided page and language ID
                 var resources = await _context.TextResources
-                    .Where(tr => tr.PageName == page && tr.LanguageId == languageId)
+                    .Where(tr => tr.PageUrl == page && tr.LanguageCode == languageCode)
                     .ToListAsync();
 
                 return Ok(resources);
@@ -48,7 +48,7 @@ namespace BackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<List<TextResource>>> AddTextResources(TextResource TextResource)
         {
-            if (!await _context.Languages.AnyAsync(l => l.Id == TextResource.LanguageId))
+            if (!await _context.Languages.AnyAsync(l => l.ShortName == TextResource.LanguageCode))
             {
                 throw new ArgumentException("Invalid language ID provided");
             }

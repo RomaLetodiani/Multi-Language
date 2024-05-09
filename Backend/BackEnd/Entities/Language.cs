@@ -6,6 +6,6 @@
 
         public required string Title { get; set; } // Language title, e.g., "English", "Georgian", etc.
 
-        public required string ShortName { get; set; } // Short name or code for the language, e.g., "EN", "GE", etc.
+        public required string Code { get; set; } // language Code, e.g., "EN", "GE", etc.
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240507190201_initial")]
+    [Migration("20240509091845_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -78,10 +78,11 @@ namespace BackEnd.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
+                    b.Property<string>("LanguageCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PageName")
+                    b.Property<string>("PageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
