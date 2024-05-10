@@ -7,11 +7,11 @@ namespace BackEnd.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LanguagesController : ControllerBase
+    public class LanguageController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public LanguagesController(DataContext context)
+        public LanguageController(DataContext context)
         {
             _context = context;
         }
