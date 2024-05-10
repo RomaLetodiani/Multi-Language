@@ -1,5 +1,5 @@
 interface language {
   id: number
-  title: string
+  name: string
   code: string
 }

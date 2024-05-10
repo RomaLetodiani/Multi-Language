@@ -2,30 +2,19 @@ import { create } from 'zustand'
 
 type LanguagesStore = {
   languages: language[]
+  setLanguages: (languages: language[]) => void
   languageCode: string
   setLanguageCode: (languageCode: string) => void
 }
 
 const useLanguageStore = create<LanguagesStore>((set) => ({
-  languages: [
-    {
-      id: 1,
-      title: 'English',
-      code: 'EN',
-    },
-    {
-      id: 2,
-      title: 'Spanish',
-      code: 'ES',
-    },
-    {
-      id: 3,
-      title: 'French',
-      code: 'FR',
-    },
-  ],
-  languageCode: 'EN',
-  setLanguageCode: (languageCode) => set({ languageCode }),
+  languages: [],
+  setLanguages: (languages) => set({ languages }),
+  languageCode: localStorage.getItem('languageCode') || 'EN',
+  setLanguageCode: (languageCode) => {
+    localStorage.setItem('languageCode', languageCode) // Save languageCode to localStorage
+    set({ languageCode })
+  },
 }))
 
 export default useLanguageStore
