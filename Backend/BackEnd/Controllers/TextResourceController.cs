@@ -24,31 +24,10 @@ namespace BackEnd.Controllers
             return Ok(TextResources);
         }
 
-        [HttpGet]
-        [Route("ResourcesByPageUrlAndLngCode")]
-        public async Task<ActionResult<List<TextResource>>> GetTextResourcesByPageUrlAndLngCode(string page, string languageCode)
-        {
-            try
-            {
-                // Retrieve text resources based on the provided page and language ID
-                var resources = await _context.TextResources
-                    .Where(tr => tr.PageUrl == page && tr.LanguageCode == languageCode)
-                    .ToListAsync();
-
-                return Ok(resources);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while retrieving text resources. See logs for details.");
-            }
-        }
-
-
         [HttpPost]
         public async Task<ActionResult<List<TextResource>>> AddTextResources(TextResource TextResource)
         {
-            if (!await _context.Languages.AnyAsync(l => l.ShortName == TextResource.LanguageCode))
+            if (!await _context.Languages.AnyAsync(l => l.Code == TextResource.LanguageCode))
             {
                 throw new ArgumentException("Invalid language ID provided");
             }
