@@ -63,5 +63,26 @@ namespace BackEnd.Controllers
                 return BadRequest("An error occurred while deleting the page. See logs for details.");
             }
         }
+
+        [HttpGet("{pathname}/textresources")]
+        public async Task<ActionResult<Dictionary<string, string>>> GetPageTextResources(string pathname, string languageCode)
+        {
+            var page = await _context.Pages
+                .Include(p => p.PageTextResource)
+                    .ThenInclude(ptr => ptr.TextResource)
+                        .ThenInclude(tr => tr.Language)
+                .FirstOrDefaultAsync(p => p.Pathname == pathname);
+
+            if (page == null)
+            {
+                return NotFound();
+            }
+
+            var textResources = page.PageTextResource
+                .Where(ptr => ptr.TextResource.Language.Code == languageCode)
+                .ToDictionary(ptr => ptr.TextResource.Key, ptr => ptr.TextResource.Text);
+
+            return textResources;
+        }
     }
 }

@@ -24,18 +24,26 @@ namespace BackEnd.Controllers
             return Ok(TextResources);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<List<TextResource>>> AddTextResources(TextResource TextResource)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TextResource>> GetTextResource(int id)
         {
-            if (!await _context.Languages.AnyAsync(l => l.Code == TextResource.LanguageCode))
+            var textResource = await _context.TextResources.FindAsync(id);
+
+            if (textResource == null)
             {
-                throw new ArgumentException("Invalid language ID provided");
+                return NotFound();
             }
 
-            _context.TextResources.Add(TextResource);
+            return textResource;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<TextResource>> CreateTextResource(TextResource textResource)
+        {
+            _context.TextResources.Add(textResource);
             await _context.SaveChangesAsync();
 
-            return Ok("Text Resource Added Succesfuly");
+            return CreatedAtAction(nameof(GetTextResource), new { id = textResource.Id }, textResource);
         }
 
         [HttpDelete]

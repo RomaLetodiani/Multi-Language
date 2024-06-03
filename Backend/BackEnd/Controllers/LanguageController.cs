@@ -23,6 +23,18 @@ namespace BackEnd.Controllers
 
             return Ok(languages);
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Language>> GetLanguage(int id)
+        {
+            var language = await _context.Languages.FindAsync(id);
+
+            if (language == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(language);
+        }
 
         [HttpPost]
         public async Task<ActionResult<List<Language>>> AddLanguage(Language language)
@@ -30,7 +42,7 @@ namespace BackEnd.Controllers
             _context.Languages.Add(language);
             await _context.SaveChangesAsync();
 
-            return Ok("Language Added Succesfuly");
+            return CreatedAtAction(nameof(GetLanguage), new { id = language.Id }, language);
         }
 
         [HttpDelete]
