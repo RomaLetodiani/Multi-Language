@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240510091000_Second")]
-    partial class Second
+    [Migration("20240603104341_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,7 @@ namespace BackEnd.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -57,13 +57,28 @@ namespace BackEnd.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Url")
+                    b.Property<string>("Pathname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Pages");
+                });
+
+            modelBuilder.Entity("BackEnd.Entities.PageTextResource", b =>
+                {
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TextResourceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PageId", "TextResourceId");
+
+                    b.HasIndex("TextResourceId");
+
+                    b.ToTable("PageTextResources");
                 });
 
             modelBuilder.Entity("BackEnd.Entities.TextResource", b =>
@@ -78,13 +93,8 @@ namespace BackEnd.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LanguageCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -92,7 +102,49 @@ namespace BackEnd.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LanguageId");
+
                     b.ToTable("TextResources");
+                });
+
+            modelBuilder.Entity("BackEnd.Entities.PageTextResource", b =>
+                {
+                    b.HasOne("BackEnd.Entities.Page", "Page")
+                        .WithMany("PageTextResource")
+                        .HasForeignKey("PageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackEnd.Entities.TextResource", "TextResource")
+                        .WithMany("PageTextResource")
+                        .HasForeignKey("TextResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Page");
+
+                    b.Navigation("TextResource");
+                });
+
+            modelBuilder.Entity("BackEnd.Entities.TextResource", b =>
+                {
+                    b.HasOne("BackEnd.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("BackEnd.Entities.Page", b =>
+                {
+                    b.Navigation("PageTextResource");
+                });
+
+            modelBuilder.Entity("BackEnd.Entities.TextResource", b =>
+                {
+                    b.Navigation("PageTextResource");
                 });
 #pragma warning restore 612, 618
         }
