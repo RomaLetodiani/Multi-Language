@@ -1,4 +1,5 @@
 ﻿using BackEnd.Data;
+using BackEnd.dtos;
 using BackEnd.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,8 +39,15 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TextResource>> CreateTextResource(TextResource textResource)
+        public async Task<ActionResult<TextResource>> CreateTextResource(TextResourceDto textResourceDto)
         {
+            var textResource = new TextResource
+            {
+                Key = textResourceDto.Key,
+                Text = textResourceDto.Text,
+                LanguageId = textResourceDto.LanguageId,
+                Language = await _context.Languages.FindAsync(textResourceDto.LanguageId)
+            };
             _context.TextResources.Add(textResource);
             await _context.SaveChangesAsync();
 

@@ -1,4 +1,5 @@
 ﻿using BackEnd.Data;
+using BackEnd.dtos;
 using BackEnd.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -37,8 +38,13 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Language>>> AddLanguage(Language language)
+        public async Task<ActionResult<List<Language>>> AddLanguage(LanguageDto languageDto)
         {
+            var language = new Language
+            {
+                Name = languageDto.Name,
+                Code = languageDto.Code
+            };
             _context.Languages.Add(language);
             await _context.SaveChangesAsync();
 

@@ -1,4 +1,5 @@
 ﻿using BackEnd.Data;
+using BackEnd.dtos;
 using BackEnd.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,8 +26,14 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Page>>> AddPage(Page Page)
+        public async Task<ActionResult<List<Page>>> AddPage(PageDto page)
         {
+            var Page = new Page
+            {
+                Name = page.Name,
+                Pathname = page.Pathname
+
+            };
             _context.Pages.Add(Page);
             await _context.SaveChangesAsync();
 
